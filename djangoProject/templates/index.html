@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bus Schedule</title>
+</head>
+<body style="background:LightGreen">
+  <form action="." method="get">
+    <label style="color:DarkRed">Количество элементов на странице: {{ paginate_by }}</label>
+    <label for="paginate_by">Выводить по:</label>
+    <select id="paginate_by" name="paginate_by">
+      <option value="">--</option>
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="10">10</option>
+    </select>
+    <input type="submit" value="Ok">
+  </form>
+  <div style="text-align:center">
+    <h1 style="color:DarkGreen">Маршруты городского транспорта в Белгороде с расписанием</h1>
+  </div>
+  <div>
+    {% for bus_route in page_obj %}
+      <div style="background:LightCyan">
+        <h1 style="color:Blue">Маршрут {{ bus_route.number }}</h1>
+        <h2 style="color:Magenta">{{ bus_route.description }}</h2>
+        {{ bus_route.schedule | linebreaks }}
+      </div>
+    {% endfor %}
+  </div>
+  {% if page_obj.has_other_pages %}
+    <nav style="text-align:center; font-size:large; position:fixed; left:0; bottom:0; background:Yellow; width:100%">
+      {% if page_obj.has_previous %}
+        <a href="?page=1">First</a>
+        <a href="?page={{ page_obj.previous_page_number }}">Prev</a>
+      {% endif %}
+      {% for page_num in page_obj.paginator.page_range %}
+        {% if page_num != page_obj.number %}
+          <a href="?page={{ page_num }}">{{ page_num }}</a>
+        {% else %}
+          {{ page_num }}
+        {% endif %}
+      {% endfor %}
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">Next</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+      {% endif %}
+    </nav>
+  {% endif %}
+</body>
+</html>
